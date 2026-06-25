@@ -1,2 +1,13 @@
-product_id,name,price,stock,category
-P101,Laptop,25000000,10,Electronics
+product_id,name,price,stock,category,description,image_url,discount_percent
+1,DNA extraction kit,"14,070,000",15,Kits,استخراج دی‌ان‌ای با خلوص بالا برای تحقیقات ژنتیکی,data/Product_images/1.png,0
+2,Gene editing simulation kit,"22,260,000",8,Kits,شبیه‌سازی ویرایش ژن با روش‌های نوین CRISPR,data/Product_images/2.png,5
+3,CRISPR training set,"34,986,700",10,Education,مجموعه آموزشی کامل برای یادگیری CRISPR,data/Product_images/3.png,10
+4,Protein analyzer,"92,470,000",4,Equipment,دستگاه آنالیز پروتئین با دقت نانوگرم,data/Product_images/4.png,0
+5,Lab robot assistant,"211,050,000",3,Robotics,ربات کمک‌کننده‌ی آزمایشگاه با قابلیت برنامه‌ریزی,data/Product_images/5.png,15
+6,Nano microscope,"58,939,300",4,Equipment,میکروسکوپ نانو با بزرگنمایی ۱۰۰۰۰۰x,data/Product_images/6.png,0
+7,Longevity serum prototype,"350,000,000",3,Biotech,نمونه‌ی اولیه سرم افزایش عمر، فقط برای تحقیقات,data/Product_images/7.png,20
+8,Recombinant insulin pack,"13,370,000",20,Biotech,بسته انسولین نوترکیب با خلوص ۹۹٪,data/Product_images/8.png,0
+9,Synthetic organ starter kit,"578,039,000",3,Kits,کیت شروع ساخت اندام مصنوعی با سلول‌های بنیادی,data/Product_images/9.png,25
+10,Bio-glow bacteria culture,"10,150,000",25,Reagents,کشت باکتری‌های بیولومینسانس برای پروژه‌های آموزشی,data/Product_images/10.png,0
+11,DNA sequencer mini,"224,000,000",3,Equipment,دستگاه توالی‌یابی دی‌ان‌ای قابل حمل,data/Product_images/11.png,10
+12,Cell culture incubator,"87,500,000",5,Equipment,انکوباتور کشت سلول با کنترل دقیق دما,data/Product_images/12.png,0
