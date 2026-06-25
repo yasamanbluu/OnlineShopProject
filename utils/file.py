@@ -1,11 +1,13 @@
+# utils/file.py
 import csv
 import os
 from utils.exceptions import FileReadError, FileWriteError, RecordNotFoundError
 
-# Define the expected fields based on project requirements
+# Updated fields based on the actual CSV data provided
 USERS_FIELDS = ['username', 'password', 'balance', 'role']
-PRODUCTS_FIELDS = ['product_id', 'name', 'price', 'stock', 'category']
-ORDERS_FIELDS = ['username', 'product_id', 'quantity', 'total_price', 'date']
+PRODUCTS_FIELDS = ['product_id', 'name', 'price', 'stock', 'category', 'description', 'image_url', 'discount_percent']
+ORDERS_FIELDS = ['username', 'product_id', 'quantity', 'total_price', 'discount_percent', 'final_price', 'date']
+REVIEWS_FIELDS = ['username', 'product_id', 'rating', 'comment', 'date']
 
 
 class CSVHandler:
@@ -22,7 +24,8 @@ class CSVHandler:
             # Ensure the directory exists (e.g., 'data/' folder)
             os.makedirs(os.path.dirname(self.filepath), exist_ok=True)
             try:
-                with open(self.filepath, mode='w', newline='', encoding='utf-8') as f:
+                # Using utf-8-sig to perfectly handle Persian characters and Excel BOM
+                with open(self.filepath, mode='w', newline='', encoding='utf-8-sig') as f:
                     writer = csv.DictWriter(f, fieldnames=self.fieldnames)
                     writer.writeheader()
             except Exception as e:
@@ -32,7 +35,8 @@ class CSVHandler:
         """Reads all records from the CSV file and returns a list of dictionaries."""
         records = []
         try:
-            with open(self.filepath, mode='r', newline='', encoding='utf-8') as f:
+            # Using utf-8-sig to perfectly handle Persian characters and Excel BOM
+            with open(self.filepath, mode='r', newline='', encoding='utf-8-sig') as f:
                 reader = csv.DictReader(f)
                 for row in reader:
                     records.append(row)
@@ -43,7 +47,7 @@ class CSVHandler:
     def write_all(self, records):
         """Overwrites the entire CSV file with the provided list of dictionaries."""
         try:
-            with open(self.filepath, mode='w', newline='', encoding='utf-8') as f:
+            with open(self.filepath, mode='w', newline='', encoding='utf-8-sig') as f:
                 writer = csv.DictWriter(f, fieldnames=self.fieldnames)
                 writer.writeheader()
                 writer.writerows(records)
@@ -53,9 +57,9 @@ class CSVHandler:
     def append_record(self, record):
         """Appends a single dictionary record to the end of the CSV file."""
         try:
-            with open(self.filepath, mode='a', newline='', encoding='utf-8') as f:
+            with open(self.filepath, mode='a', newline='', encoding='utf-8-sig') as f:
                 writer = csv.DictWriter(f, fieldnames=self.fieldnames)
-                # Ensure header is written if file was somehow emptied
+                # Ensure header is written if file was somehow emptied manually
                 if os.path.getsize(self.filepath) == 0:
                     writer.writeheader()
                 writer.writerow(record)
@@ -106,3 +110,4 @@ class Database:
         self.users = CSVHandler(os.path.join(data_dir, 'users.csv'), USERS_FIELDS)
         self.products = CSVHandler(os.path.join(data_dir, 'products.csv'), PRODUCTS_FIELDS)
         self.orders = CSVHandler(os.path.join(data_dir, 'orders.csv'), ORDERS_FIELDS)
+        self.reviews = CSVHandler(os.path.join(data_dir, 'reviews.csv'), REVIEWS_FIELDS)
