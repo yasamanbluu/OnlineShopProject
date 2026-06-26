@@ -6,7 +6,7 @@ def read_orders():  # کل سفارش ها را میخواند
     orders = []
 
     try:
-        with open("orders.csv", "r", encoding="utf-8") as file:
+        with open("data/orders.csv", "r", encoding="utf-8") as file:
             csv_reader = csv.DictReader(file)
             for row in csv_reader:
                 orders.append(row)
