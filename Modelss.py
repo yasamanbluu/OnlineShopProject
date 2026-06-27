@@ -10,30 +10,50 @@ def _require_text(value, field_name):
 
 
 def _require_positive_number(value, field_name):
-    value = float(value)
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        raise ValidationError(f"{field_name} must be a number.")
+
     if value <= 0:
         raise ValidationError(f"{field_name} must be positive.")
+
     return value
 
 
 def _require_non_negative_number(value, field_name):
-    value = float(value)
+    try:
+        value = float(value)
+    except (TypeError, ValueError):
+        raise ValidationError(f"{field_name} must be a number.")
+
     if value < 0:
         raise ValidationError(f"{field_name} cannot be negative.")
+
     return value
 
 
 def _require_positive_int(value, field_name):
-    value = int(value)
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise ValidationError(f"{field_name} must be an integer.")
+
     if value <= 0:
         raise ValidationError(f"{field_name} must be positive.")
+
     return value
 
 
 def _require_non_negative_int(value, field_name):
-    value = int(value)
+    try:
+        value = int(value)
+    except (TypeError, ValueError):
+        raise ValidationError(f"{field_name} must be an integer.")
+
     if value < 0:
         raise ValidationError(f"{field_name} cannot be negative.")
+
     return value
 
 
@@ -53,8 +73,10 @@ class User:
 
     def reduce_balance(self, amount):
         amount = _require_positive_number(amount, "Amount")
+
         if self.balance < amount:
             raise ValidationError("Balance is not enough.")
+
         self.balance -= amount
 
     def to_csv_row(self):
@@ -78,8 +100,21 @@ class Admin(User):
     def __init__(self, username, password, balance=0):
         super().__init__(username, password, balance, "admin")
 
-    def can_manage_products(self):
-        return True
+    def add_product(self, products, product):
+        products.append(product)
+
+    def remove_product(self, products, product):
+        if product in products:
+            products.remove(product)
+
+    def edit_price(self, product, new_price):
+        product.price = _require_positive_number(new_price, "Price")
+
+    def edit_stock(self, product, new_stock):
+        product.stock = _require_non_negative_int(new_stock, "Stock")
+
+    def set_discount(self, product, discount_percent):
+        product.set_discount(discount_percent)
 
 
 class Product:
@@ -89,13 +124,9 @@ class Product:
         self.price = _require_positive_number(price, "Price")
         self.stock = _require_non_negative_int(stock, "Stock")
         self.category = _require_text(category, "Category")
-        self.discount_percent = _require_non_negative_number(
-            discount_percent,
-            "Discount percent"
-        )
+        self.discount_percent = 0
 
-        if self.discount_percent > 100:
-            raise ValidationError("Discount percent cannot be more than 100.")
+        self.set_discount(discount_percent)
 
     def increase_stock(self, quantity):
         quantity = _require_positive_int(quantity, "Quantity")
@@ -103,13 +134,25 @@ class Product:
 
     def decrease_stock(self, quantity):
         quantity = _require_positive_int(quantity, "Quantity")
+
         if self.stock < quantity:
             raise StockError("Not enough stock.")
+
         self.stock -= quantity
 
+    def set_discount(self, discount_percent):
+        discount_percent = _require_non_negative_number(
+            discount_percent,
+            "Discount percent"
+        )
+
+        if discount_percent > 100:
+            raise ValidationError("Discount percent cannot be more than 100.")
+
+        self.discount_percent = discount_percent
+
     def final_price(self):
-        discount_amount = self.price * self.discount_percent / 100
-        return self.price - discount_amount
+        return self.price * (100 - self.discount_percent) / 100
 
     def to_csv_row(self):
         return {
