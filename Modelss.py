@@ -125,7 +125,6 @@ class Product:
         self.stock = _require_non_negative_int(stock, "Stock")
         self.category = _require_text(category, "Category")
         self.discount_percent = 0
-
         self.set_discount(discount_percent)
 
     def increase_stock(self, quantity):
@@ -166,25 +165,19 @@ class Product:
 
 
 class Order:
-    def __init__(self, username, product_id, quantity, total_price, date):
-        self.username = _require_text(username, "Username")
-        self.product_id = _require_text(product_id, "Product id")
-        self.quantity = _require_positive_int(quantity, "Quantity")
-        self.total_price = _require_positive_number(total_price, "Total price")
-        self.date = _require_text(date, "Date")
-
-    @classmethod
-    def create(cls, username, product, quantity):
+    def __init__(self, username, product, quantity, date=None):
         quantity = _require_positive_int(quantity, "Quantity")
         product.decrease_stock(quantity)
 
-        return cls(
-            username,
-            product.product_id,
-            quantity,
-            product.final_price() * quantity,
-            datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
-        )
+        self.username = _require_text(username, "Username")
+        self.product_id = _require_text(product.product_id, "Product id")
+        self.quantity = quantity
+        self.total_price = product.final_price() * quantity
+
+        if date is None:
+            self.date = datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+        else:
+            self.date = _require_text(date, "Date")
 
     def to_csv_row(self):
         return {
