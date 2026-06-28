@@ -39,7 +39,7 @@ class OnlineShop:
         """show login page"""
         self.clear()
 
-        #reload data from csv (in case admin made changes)
+        #reload data from csv (in case that admin made changes)
         try:
             self.products = self.db.load_products()
             self.reviews = self.db.load_reviews()
