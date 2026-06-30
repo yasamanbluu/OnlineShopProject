@@ -1,20 +1,34 @@
-import csv
+from validators import require_text, require_positive_int
+from datetime import datetime
 
 
-def add_comment(username, product_id, comment):
-    print("comment is saved.")
-    with open("data/reviews.csv", "a", newline="", encoding="utf-8") as file:
+class Comment:
+    """کلاس کامنت‌ها/نقد و نظرات reviews.csv"""
 
-        csv_writer = csv.writer(file)
-        csv_writer.writerow([username, product_id, comment])
+    def __init__(self, username, product_id, comment_text, rating, date=None):
+        self.username = require_text(username, "Username")
+        self.product_id = str(product_id)
+        self.comment_text = require_text(comment_text, "Comment text")
 
+        # امتیاز باید بین 1 تا 5 باشد
+        rating = int(require_positive_int(rating, "Rating"))
+        if rating > 5 or rating < 1:
+            raise ValueError("Rating must be between 1 and 5")
+        self.rating = rating
 
-def get_comments(product_id):
-    comments = []
-    with open("data/reviews.csv", "r", encoding="utf-8") as file:
-        csv_reader = csv.DictReader(file)
+        # تاریخ
+        if date is None:
+            self.date = datetime.now().strftime("%Y-%m-%d")
+        else:
+            self.date = date
 
-        for row in csv_reader:
-            if row["product_id"] == product_id:
-                comments.append(row["comment"])
-    return comments
+    def to_csv_row(self):
+        """برای ذخیره در reviews.csv"""
+        return {
+            "username": self.username,
+            "product_id": self.product_id,
+            "comment": self.comment_text,
+            "rating": self.rating,
+            "date": self.date,
+        }
+
