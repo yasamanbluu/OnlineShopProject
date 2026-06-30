@@ -1,7 +1,4 @@
 from datetime import datetime
-from product import Product
-from order import Order
-
 
 class ShoppingCart():
     """مدیریت سبد خرید"""
@@ -35,7 +32,7 @@ class ShoppingCart():
         total = 0
 
         for item in self.items.values():
-            total += item["product"].final_price() * item["qty"]
+            total += item["product"].final_price() * item["quantity"]
 
         return total
 
@@ -50,7 +47,7 @@ class ShoppingCart():
         self.items.clear()
 
 
-class DiscountSystem:
+class DiscountSystem():
     """سیستم تخفیف"""
 
     def apply_discount(self, product, discount_percent):
@@ -74,7 +71,7 @@ class DiscountSystem:
                 product.set_discount(discount_map[product.product_id])
 
 
-class ReviewSystem:
+class ReviewSystem():
     """سیستم امتیاز و نظر"""
 
     def get_product_rating(self, comments):
@@ -91,23 +88,23 @@ class ReviewSystem:
 
     def get_reviews_by_rating(self, comments, rating):
         """دریافت نظرات با امتیاز خاص"""
-        return [c for c in comments if c.get("rating") == rating]
+        return [c for c in comments if c.rating == rating]
 
     def get_positive_reviews(self, comments):
         """نظرات مثبت (امتیاز 4-5)"""
-        return [c for c in comments if c.get("rating", 0) >= 4]
+        return [c for c in comments if c.rating >= 4]
 
     def get_negative_reviews(self, comments):
         """نظرات منفی (امتیاز 1-2)"""
-        return [c for c in comments if c.get("rating", 0) <= 2]
+        return [c for c in comments if c.rating <= 2]
 
 
-class SalesReport:
+class SalesReport():
     """گزارش فروش"""
 
     def get_total_sales(self, orders):
         """کل فروش"""
-        return sum(order.get("total_price", 0) for order in orders)
+        return sum(order.total_price for order in orders)
 
     def get_sales_by_date(self, orders, date):
         """فروش یک تاریخ خاص"""
@@ -116,7 +113,7 @@ class SalesReport:
             if order.get("date", "").startswith(date)
         ]
 
-        return sum(order.get("total_price", 0) for order in day_orders)
+        return sum(order.total_price for order in day_orders)
 
     def get_sales_between_dates(self, orders, start_date, end_date):
         """گزارش فروش بین دو تاریخ"""
@@ -124,7 +121,7 @@ class SalesReport:
         end = datetime.strptime(end_date, "%Y-%m-%d")
         total = 0
         for order in orders:
-            order_date = datetime.strptime(order.get("date"), "%Y-%m-%d")
+            order_date = datetime.strptime(order.date[:10], "%Y-%m-%d")
             if start <= order_date <= end:
                 total += order.get("total_price", 0)
         return total
@@ -170,7 +167,7 @@ class SalesReport:
         return self.get_total_sales(orders) / len(orders)
 
 
-class SearchFilter:
+class SearchFilter():
     """جستجو و فیلتر"""
 
     def search_by_name(self, products, keyword):
