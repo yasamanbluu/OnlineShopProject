@@ -4,7 +4,7 @@
 
 Online Biotech Shop is a desktop-based e-commerce application developed in Python using Object-Oriented Programming (OOP) principles and the Tkinter library.
 
-Tاhis project is a small biotechnology product store where customers can browse laboratory products, search for items, place orders, and submit reviews. Admins can manage products, apply discounts, monitor inventory, and generate sales reports. All application data is stored using CSV files without relying on a database management system.
+This project is a small biotechnology product store where customers can browse laboratory products, search for items, place orders, and submit reviews. Admins can manage products, apply discounts, monitor inventory, and generate sales reports. All application data is stored using CSV files without relying on a database management system.
 
 ## Features
 
