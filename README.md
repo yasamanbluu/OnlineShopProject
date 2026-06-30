@@ -1,2 +1,0 @@
-# OnlineShopProject
-AP projev=ct
